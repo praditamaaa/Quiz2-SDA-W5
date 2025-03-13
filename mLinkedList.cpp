@@ -1,66 +1,38 @@
-#include <windows.h>
+/*
+QUIZ 2 Pemahaman Linked List
+File main
+By: Praditama Ajmal Hasan
+Absen: 22
+13 Februari 2025	
+*/
 
-/* This is where all the input to the window goes to */
-LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
-	switch(Message) {
-		
-		/* Upon destruction, tell the main thread to stop */
-		case WM_DESTROY: {
-			PostQuitMessage(0);
-			break;
-		}
-		
-		/* All other messages (a lot of them) are processed using default procedures */
-		default:
-			return DefWindowProc(hwnd, Message, wParam, lParam);
-	}
-	return 0;
-}
+#include<stdio.h>
+#include<stdlib.h>
+#include "LinkedList.h"
 
-/* The 'main' function of Win32 GUI programs: this is where execution starts */
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-	WNDCLASSEX wc; /* A properties struct of our window */
-	HWND hwnd; /* A 'HANDLE', hence the H, or a pointer to our window */
-	MSG msg; /* A temporary location for all messages */
-
-	/* zero out the struct and set the stuff we want to modify */
-	memset(&wc,0,sizeof(wc));
-	wc.cbSize		 = sizeof(WNDCLASSEX);
-	wc.lpfnWndProc	 = WndProc; /* This is where we will send messages to */
-	wc.hInstance	 = hInstance;
-	wc.hCursor		 = LoadCursor(NULL, IDC_ARROW);
+int main() {
 	
-	/* White, COLOR_WINDOW is just a #define for a system color, try Ctrl+Clicking it */
-	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
-	wc.lpszClassName = "WindowClass";
-	wc.hIcon		 = LoadIcon(NULL, IDI_APPLICATION); /* Load a standard icon */
-	wc.hIconSm		 = LoadIcon(NULL, IDI_APPLICATION); /* use the name "A" to use the project icon */
+	Node* head = NULL;
+	
+	// 1. Insert 7 sebagai elemen pertama
+    insertFirst(&head, 7);
+    printLinkedList(head); 
 
-	if(!RegisterClassEx(&wc)) {
-		MessageBox(NULL, "Window Registration Failed!","Error!",MB_ICONEXCLAMATION|MB_OK);
-		return 0;
-	}
+    // 2. Insert 11 sebagai elemen terakhir
+    insertLast(&head, 11);
+    printLinkedList(head); 
 
-	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE,"WindowClass","Caption",WS_VISIBLE|WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, /* x */
-		CW_USEDEFAULT, /* y */
-		640, /* width */
-		480, /* height */
-		NULL,NULL,hInstance,NULL);
+    // 3. Insert 9 di antara 7 dan 11
+    insertAfter(head, 9, 2); 
+    printLinkedList(head); 
 
-	if(hwnd == NULL) {
-		MessageBox(NULL, "Window Creation Failed!","Error!",MB_ICONEXCLAMATION|MB_OK);
-		return 0;
-	}
+    // 4. Insert 5 di awal list
+    insertFirst(&head, 5);
+    printLinkedList(head); 
 
-	/*
-		This is the heart of our program where all input is processed and 
-		sent to WndProc. Note that GetMessage blocks code flow until it receives something, so
-		this loop will not produce unreasonably high CPU usage
-	*/
-	while(GetMessage(&msg, NULL, 0, 0) > 0) { /* If no error is received... */
-		TranslateMessage(&msg); /* Translate key codes to chars if present */
-		DispatchMessage(&msg); /* Send it to WndProc */
-	}
-	return msg.wParam;
+    // 5. Insert 13 di akhir list
+    insertLast(&head, 13);
+    printLinkedList(head); 
+	
+	return 0;
 }
